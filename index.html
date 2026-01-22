@@ -2,298 +2,249 @@
 <html lang="no">
 <head>
 <meta charset="UTF-8">
-<title>Katte-App</title>
-
+<title>Kattespill</title>
 <style>
-html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background: #bde7ff;
-    font-family: Arial, sans-serif;
-    overflow: hidden;
-}
-
-#game {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-
-/* CAT */
-#cat {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: #ffb347;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    transition: all 0.5s;
-}
-
-/* EARS */
-.ear {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: #ffb347;
-    top: -30px;
-    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-}
-
-.ear.left { left: 20px; }
-.ear.right { right: 20px; }
-
-#cat.dead {
-    transform: translate(-50%, -50%) rotate(90deg);
-}
-
-.face {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-/* EYES */
-.eye {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: black;
-    top: 70px;
-}
-
-.eye.left {
-    left: 50px;
-    transform: translateX(-6px);
-}
-
-.eye.right {
-    right: 50px;
-    transform: translateX(6px);
-}
-
-.dead .eye {
-    background: none;
-}
-
-.dead .eye::before,
-.dead .eye::after {
-    content: "";
-    position: absolute;
-    width: 20px;
-    height: 3px;
-    background: black;
-    top: 8px;
-}
-
-.dead .eye::before { transform: rotate(45deg); }
-.dead .eye::after { transform: rotate(-45deg); }
-
-#mouth {
-    position: absolute;
-    width: 40px;
-    height: 20px;
-    border-bottom: 5px solid black;
-    bottom: 50px;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-/* MESSAGE */
-#message {
-    position: absolute;
-    top: 15%;
-    width: 100%;
-    text-align: center;
-    font-size: 36px;
-    font-weight: bold;
-    color: red;
-    display: none;
-}
-
-/* RESTART BUTTON */
-#restart {
-    position: absolute;
-    top: calc(50% + 140px);
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    display: none;
-}
-
-/* BUTTONS */
-.button {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    background: yellow;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-}
-
-.button svg {
-    width: 40px;
-    height: 40px;
-    fill: black;
-}
-
-.left { left: 40px; }
-.right { right: 40px; }
-
-.top { top: 35%; }
-.bottom { top: 55%; }
-
-/* TACO */
-.taco {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    background: brown;
-    top: 50%;
-    left: 60%;
-    border-radius: 5px;
-    animation: eat 1s forwards;
-}
-
-@keyframes eat {
-    to {
-        left: 50%;
-        opacity: 0;
+    body {
+        margin: 0;
+        background: #87ceeb;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
     }
-}
 
-/* WATER */
-#water {
-    position: absolute;
-    width: 100%;
-    height: 0%;
-    bottom: 0;
-    background: rgba(0, 0, 255, 0.5);
-    transition: height 2s;
-    pointer-events: none;
-}
+    .game {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* CAT */
+    .cat {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 160px;
+        height: 160px;
+        background: #f4a261;
+        transition: all 0.5s ease;
+    }
+
+    .cat.dead {
+        transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    /* ears */
+    .ear {
+        position: absolute;
+        top: -30px;
+        width: 40px;
+        height: 40px;
+        background: #f4a261;
+        clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .ear.left { left: 10px; }
+    .ear.right { right: 10px; }
+
+    /* eyes */
+    .eye {
+        position: absolute;
+        top: 50px;
+        width: 30px;
+        height: 30px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .eye.left { left: 30px; }
+    .eye.right { right: 30px; }
+
+    .pupil {
+        position: absolute;
+        top: 10px;
+        width: 10px;
+        height: 10px;
+        background: black;
+        border-radius: 50%;
+    }
+
+    .eye.left .pupil { left: 0; }
+    .eye.right .pupil { right: 0; }
+
+    .dead .eye {
+        background: none;
+    }
+
+    .dead .eye::before {
+        content: "✖";
+        font-size: 28px;
+        color: black;
+    }
+
+    /* slap mark */
+    .slap {
+        position: absolute;
+        width: 60px;
+        height: 30px;
+        background: rgba(255,0,0,0.4);
+        top: 80px;
+        left: 50px;
+        display: none;
+    }
+
+    /* TEXT */
+    .message {
+        position: absolute;
+        top: 15%;
+        width: 100%;
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        display: none;
+    }
+
+    /* BUTTONS */
+    .btn {
+        position: absolute;
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: yellow;
+        color: black;
+        font-size: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .btn.left1 { left: 30px; top: 40%; }
+    .btn.left2 { left: 30px; top: 55%; }
+    .btn.right1 { right: 30px; top: 40%; }
+    .btn.right2 { right: 30px; top: 55%; }
+
+    /* retry */
+    .retry {
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 15px 30px;
+        background: green;
+        color: white;
+        font-size: 20px;
+        display: none;
+        cursor: pointer;
+    }
+
+    /* water */
+    .water {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 0;
+        background: rgba(0,0,255,0.4);
+        transition: height 2s linear;
+        pointer-events: none;
+    }
 </style>
 </head>
-
 <body>
-<div id="game">
 
-    <div id="message">DU DREPTE DEN!</div>
+<div class="game">
+    <div class="message" id="msg">DU DREPTE DEN!</div>
 
-    <div id="cat">
+    <div class="cat" id="cat">
         <div class="ear left"></div>
         <div class="ear right"></div>
 
-        <div class="face">
-            <div class="eye left"></div>
-            <div class="eye right"></div>
-            <div id="mouth"></div>
-        </div>
+        <div class="eye left"><div class="pupil"></div></div>
+        <div class="eye right"><div class="pupil"></div></div>
+
+        <div class="slap" id="slap"></div>
     </div>
 
-    <button id="restart" onclick="restart()">Prøv igjen</button>
+    <!-- buttons -->
+    <div class="btn left1" onclick="shower()">🚿</div>
+    <div class="btn left2" onclick="slap()">✋</div>
+    <div class="btn right1" onclick="feed()">🌮</div>
+    <div class="btn right2" onclick="toilet()">🚽</div>
 
-    <div id="water"></div>
-
-    <!-- LEFT -->
-    <div class="button left top" onclick="shower()"></div>
-    <div class="button left bottom" onclick="pet()"></div>
-
-    <!-- RIGHT -->
-    <div class="button right top" onclick="feed()"></div>
-    <div class="button right bottom" onclick="poop()"></div>
-
+    <div class="retry" id="retry" onclick="restart()">PRØV IGJEN</div>
+    <div class="water" id="water"></div>
 </div>
 
 <script>
-let size, alive, hungerTimer;
+let size = 160;
+let alive = true;
+let hungerTimer;
 
-init();
+startHunger();
 
-function init() {
-    size = 200;
-    alive = true;
-
-    const cat = document.getElementById("cat");
-    cat.classList.remove("dead");
-    cat.style.width = size + "px";
-    cat.style.height = size + "px";
-    cat.style.transform = "translate(-50%, -50%)";
-
-    document.getElementById("message").style.display = "none";
-    document.getElementById("restart").style.display = "none";
-    document.getElementById("water").style.height = "0%";
-
-    resetHunger();
-}
-
-function resetHunger() {
+function startHunger() {
     clearTimeout(hungerTimer);
-    hungerTimer = setTimeout(die, 300000);
+    hungerTimer = setTimeout(() => {
+        if (alive) kill();
+    }, 300000); // 5 minutter
 }
 
 function feed() {
     if (!alive) return;
-    resetHunger();
-
-    const taco = document.createElement("div");
-    taco.className = "taco";
-    document.getElementById("game").appendChild(taco);
-    setTimeout(() => taco.remove(), 1000);
-
-    size += 30;
-    catResize();
-
-    if (size >= 350) die();
+    size += 20;
+    cat.style.width = size + "px";
+    cat.style.height = size + "px";
+    startHunger();
+    if (size >= 300) {
+        kill();
+    }
 }
 
-function poop() {
+function toilet() {
     if (!alive) return;
-    size = 200;
-    catResize();
-}
-
-function shower() {
-    if (!alive) return;
-    document.getElementById("water").style.height = "100%";
-    setTimeout(die, 2000);
-}
-
-function pet() {
-    if (!alive) return;
-    const cat = document.getElementById("cat");
-    cat.style.transform = "translate(-50%, -50%) scale(1.05)";
-    setTimeout(() => {
-        cat.style.transform = "translate(-50%, -50%)";
-    }, 300);
-}
-
-function catResize() {
-    const cat = document.getElementById("cat");
+    size = 160;
     cat.style.width = size + "px";
     cat.style.height = size + "px";
 }
 
-function die() {
+function shower() {
     if (!alive) return;
+    water.style.height = "100%";
+    setTimeout(kill, 2000);
+}
+
+function slap() {
+    if (!alive) return;
+    slapMark.style.display = "block";
+    setTimeout(() => slapMark.style.display = "none", 500);
+    kill();
+}
+
+function kill() {
     alive = false;
-    document.getElementById("cat").classList.add("dead");
-    document.getElementById("message").style.display = "block";
-    document.getElementById("restart").style.display = "block";
+    cat.classList.add("dead");
+    msg.style.display = "block";
+    retry.style.display = "block";
 }
 
 function restart() {
-    init();
+    alive = true;
+    size = 160;
+    cat.style.width = size + "px";
+    cat.style.height = size + "px";
+    cat.classList.remove("dead");
+    msg.style.display = "none";
+    retry.style.display = "none";
+    water.style.height = "0";
+    startHunger();
 }
+
+const cat = document.getElementById("cat");
+const msg = document.getElementById("msg");
+const retry = document.getElementById("retry");
+const water = document.getElementById("water");
+const slapMark = document.getElementById("slap");
 </script>
+
 </body>
 </html>
