@@ -29,8 +29,21 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: transform 0.5s, width 0.5s, height 0.5s;
+    transition: all 0.5s;
 }
+
+/* EARS */
+.ear {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #ffb347;
+    top: -30px;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+.ear.left { left: 20px; }
+.ear.right { right: 20px; }
 
 #cat.dead {
     transform: translate(-50%, -50%) rotate(90deg);
@@ -42,16 +55,24 @@ html, body {
     height: 100%;
 }
 
+/* EYES */
 .eye {
     position: absolute;
     width: 20px;
     height: 20px;
     background: black;
-    top: 60px;
+    top: 70px;
 }
 
-.eye.left { left: 50px; }
-.eye.right { right: 50px; }
+.eye.left {
+    left: 50px;
+    transform: translateX(-6px);
+}
+
+.eye.right {
+    right: 50px;
+    transform: translateX(6px);
+}
 
 .dead .eye {
     background: none;
@@ -65,7 +86,6 @@ html, body {
     height: 3px;
     background: black;
     top: 8px;
-    left: 0;
 }
 
 .dead .eye::before { transform: rotate(45deg); }
@@ -90,6 +110,20 @@ html, body {
     font-size: 36px;
     font-weight: bold;
     color: red;
+    display: none;
+}
+
+/* RESTART BUTTON */
+#restart {
+    position: absolute;
+    top: calc(50% + 140px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
     display: none;
 }
 
@@ -133,7 +167,6 @@ html, body {
 @keyframes eat {
     to {
         left: 50%;
-        top: 50%;
         opacity: 0;
     }
 }
@@ -157,6 +190,9 @@ html, body {
     <div id="message">DU DREPTE DEN!</div>
 
     <div id="cat">
+        <div class="ear left"></div>
+        <div class="ear right"></div>
+
         <div class="face">
             <div class="eye left"></div>
             <div class="eye right"></div>
@@ -164,90 +200,66 @@ html, body {
         </div>
     </div>
 
+    <button id="restart" onclick="restart()">Prøv igjen</button>
+
     <div id="water"></div>
 
-    <!-- LEFT BUTTONS -->
-    <div class="button left top" onclick="shower()">
-        <!-- shower -->
-        <svg viewBox="0 0 64 64">
-            <path d="M32 2a20 20 0 0 0-20 20h6a14 14 0 1 1 28 0h6A20 20 0 0 0 32 2z"/>
-            <circle cx="20" cy="50" r="3"/>
-            <circle cx="32" cy="54" r="3"/>
-            <circle cx="44" cy="50" r="3"/>
-        </svg>
-    </div>
+    <!-- LEFT -->
+    <div class="button left top" onclick="shower()"></div>
+    <div class="button left bottom" onclick="pet()"></div>
 
-    <div class="button left bottom" onclick="pet()">
-        <!-- hand -->
-        <svg viewBox="0 0 64 64">
-            <path d="M20 30V10a4 4 0 0 1 8 0v20"/>
-            <path d="M28 30V8a4 4 0 0 1 8 0v22"/>
-            <path d="M36 30V10a4 4 0 0 1 8 0v20"/>
-            <path d="M44 30v8c0 8-6 14-14 14h-6c-8 0-14-6-14-14v-6"/>
-        </svg>
-    </div>
-
-    <!-- RIGHT BUTTONS -->
-    <div class="button right top" onclick="feed()">
-        <!-- taco -->
-        <svg viewBox="0 0 64 64">
-            <path d="M2 32a30 30 0 0 1 60 0H2z"/>
-        </svg>
-    </div>
-
-    <div class="button right bottom" onclick="poop()">
-        <!-- toilet -->
-        <svg viewBox="0 0 64 64">
-            <rect x="10" y="10" width="30" height="20"/>
-            <rect x="20" y="30" width="30" height="20"/>
-        </svg>
-    </div>
+    <!-- RIGHT -->
+    <div class="button right top" onclick="feed()"></div>
+    <div class="button right bottom" onclick="poop()"></div>
 
 </div>
 
 <script>
-let size = 200;
-let alive = true;
-let hungerTimer;
+let size, alive, hungerTimer;
 
-startHunger();
+init();
 
-function startHunger() {
-    hungerTimer = setTimeout(() => {
-        die();
-    }, 300000); // 5 minutes
+function init() {
+    size = 200;
+    alive = true;
+
+    const cat = document.getElementById("cat");
+    cat.classList.remove("dead");
+    cat.style.width = size + "px";
+    cat.style.height = size + "px";
+    cat.style.transform = "translate(-50%, -50%)";
+
+    document.getElementById("message").style.display = "none";
+    document.getElementById("restart").style.display = "none";
+    document.getElementById("water").style.height = "0%";
+
+    resetHunger();
 }
 
 function resetHunger() {
     clearTimeout(hungerTimer);
-    startHunger();
+    hungerTimer = setTimeout(die, 300000);
 }
 
 function feed() {
     if (!alive) return;
-
     resetHunger();
 
     const taco = document.createElement("div");
     taco.className = "taco";
     document.getElementById("game").appendChild(taco);
-
     setTimeout(() => taco.remove(), 1000);
 
     size += 30;
-    document.getElementById("cat").style.width = size + "px";
-    document.getElementById("cat").style.height = size + "px";
+    catResize();
 
-    if (size >= 350) {
-        die();
-    }
+    if (size >= 350) die();
 }
 
 function poop() {
     if (!alive) return;
     size = 200;
-    document.getElementById("cat").style.width = size + "px";
-    document.getElementById("cat").style.height = size + "px";
+    catResize();
 }
 
 function shower() {
@@ -259,10 +271,16 @@ function shower() {
 function pet() {
     if (!alive) return;
     const cat = document.getElementById("cat");
-    cat.style.transform += " scale(1.05)";
+    cat.style.transform = "translate(-50%, -50%) scale(1.05)";
     setTimeout(() => {
         cat.style.transform = "translate(-50%, -50%)";
     }, 300);
+}
+
+function catResize() {
+    const cat = document.getElementById("cat");
+    cat.style.width = size + "px";
+    cat.style.height = size + "px";
 }
 
 function die() {
@@ -270,6 +288,11 @@ function die() {
     alive = false;
     document.getElementById("cat").classList.add("dead");
     document.getElementById("message").style.display = "block";
+    document.getElementById("restart").style.display = "block";
+}
+
+function restart() {
+    init();
 }
 </script>
 </body>
